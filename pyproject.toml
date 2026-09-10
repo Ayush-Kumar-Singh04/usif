@@ -1,0 +1,5 @@
+[tool.pyrefly]
+python_interpreter = "backend/venv/Scripts/python.exe"
+
+[errors]
+missing-import = false
