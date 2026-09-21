@@ -18,6 +18,8 @@ function Recommendations() {
 
   useEffect(() => {
     fetchRecommendations();
+    const interval = setInterval(fetchRecommendations, 3000);
+    return () => clearInterval(interval);
   }, []);
 
   const handleResolve = (id) => {

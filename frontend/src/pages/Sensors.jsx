@@ -20,6 +20,8 @@ function Sensors() {
 
   useEffect(() => {
     fetchSensors();
+    const interval = setInterval(fetchSensors, 3000);
+    return () => clearInterval(interval);
   }, []);
 
   const handleChange = (e) => {

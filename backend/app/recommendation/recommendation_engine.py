@@ -54,8 +54,10 @@ def generate_recommendation(
         reasons.append("abnormal telemetry pattern detected")
         failure_keys.append("general")
 
-    # Build a failure signature to detect duplicates
-    failure_sig = "|".join(sorted(failure_keys))
+    # Build a failure signature to detect duplicates. Include the decision so a
+    # SUSPICIOUS alert doesn't suppress the later MALICIOUS escalation (same checks
+    # fail, but it's a distinct, more severe event worth surfacing).
+    failure_sig = investigation.final_decision + ":" + "|".join(sorted(failure_keys))
     
     # Check if an active recommendation already exists for this sensor
     # with the same failure signature (embedded in the recommendation text)

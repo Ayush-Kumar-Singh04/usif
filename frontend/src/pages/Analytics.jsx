@@ -29,9 +29,14 @@ function Analytics() {
   const [readings, setReadings] = useState([]);
 
   useEffect(() => {
-    api.get("/readings")
-      .then(response => setReadings(response.data))
-      .catch(err => console.error("Error fetching readings for analytics:", err));
+    const fetchReadings = () => {
+      api.get("/readings")
+        .then(response => setReadings(response.data))
+        .catch(err => console.error("Error fetching readings for analytics:", err));
+    };
+    fetchReadings();
+    const interval = setInterval(fetchReadings, 3000);
+    return () => clearInterval(interval);
   }, []);
 
   const sortedReadings = [...readings].sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));

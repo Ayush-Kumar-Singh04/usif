@@ -16,20 +16,26 @@ function Dashboard() {
   const [recentInvestigations, setRecentInvestigations] = useState([]);
 
   useEffect(() => {
-    api.get("/stats")
-      .then(response => setStats(response.data))
-      .catch(error => console.error("Error fetching stats:", error));
+    const fetchData = () => {
+      api.get("/stats")
+        .then(response => setStats(response.data))
+        .catch(error => console.error("Error fetching stats:", error));
 
-    api.get("/readings")
-      .then(response => {
-        const sorted = [...response.data].sort((a, b) => b.id - a.id).slice(0, 5);
-        setRecentReadings(sorted);
-      })
-      .catch(error => console.error("Error fetching readings:", error));
+      api.get("/readings")
+        .then(response => {
+          const sorted = [...response.data].sort((a, b) => b.id - a.id).slice(0, 5);
+          setRecentReadings(sorted);
+        })
+        .catch(error => console.error("Error fetching readings:", error));
 
-    api.get("/investigations")
-      .then(response => setRecentInvestigations(response.data.slice(0, 5)))
-      .catch(error => console.error("Error fetching investigations:", error));
+      api.get("/investigations")
+        .then(response => setRecentInvestigations(response.data.slice(0, 5)))
+        .catch(error => console.error("Error fetching investigations:", error));
+    };
+
+    fetchData();                                    // initial load
+    const interval = setInterval(fetchData, 3000);  // live refresh every 3s
+    return () => clearInterval(interval);           // stop polling on unmount
   }, []);
 
   const getHealthColor = (health) => {

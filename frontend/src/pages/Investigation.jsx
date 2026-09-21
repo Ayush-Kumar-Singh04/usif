@@ -16,6 +16,8 @@ function Investigation() {
 
   useEffect(() => {
     fetchInvestigations();
+    const interval = setInterval(fetchInvestigations, 3000);
+    return () => clearInterval(interval);
   }, []);
 
   const getDecisionBadge = (decision) => {
